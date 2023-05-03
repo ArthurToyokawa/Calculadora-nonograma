@@ -1,11 +1,11 @@
-
+// TODO CRIAR CLASSE MODELO PARA OS TYPES
 type CoordinateLocations = {
   coordinate: number
   firstPossibleBox: number
   lastPossibleBox: number
 }
 
-type CoordinatesGrid = {
+type GridCoordinates = {
   lineCoordinates: number[][]
   columnCoordinates: number[][]
 }
@@ -16,7 +16,7 @@ enum BoxState {
   crossed,
 }
 
-const coordinatesGrid: CoordinatesGrid = {
+const gridCoordinates: GridCoordinates = {
   lineCoordinates: [ [ 3 ], [ 2, 1 ], [ 4 ], [ 5 ], [ 2, 1 ] ],
   columnCoordinates: [ [ 3 ], [ 5 ], [ 1, 3 ], [ 4 ], [ 2 ] ]
 }
@@ -164,10 +164,10 @@ const getCoordinateLocations = (boxArray: BoxState[], coordinates: number[]):Coo
   return possibleBoxes
 }
 
-const solveGrid = (coordinatesGrid: CoordinatesGrid): BoxState[][] => {
-  const box = createEmptyBox(coordinatesGrid.lineCoordinates.length, coordinatesGrid.columnCoordinates.length)
+const solveGrid = (gridCoordinates: GridCoordinates): BoxState[][] => {
+  const box = createEmptyBox(gridCoordinates.lineCoordinates.length, gridCoordinates.columnCoordinates.length)
   console.log(box)
-  coordinatesGrid.lineCoordinates.forEach((coordinates, index) => {
+  gridCoordinates.lineCoordinates.forEach((coordinates, index) => {
     // corre todos os algoritimos 
     // fillEmptyRows(box[index], coordinates)
     // fillFullRows(box[index], coordinates)
@@ -181,7 +181,9 @@ const solveGrid = (coordinatesGrid: CoordinatesGrid): BoxState[][] => {
 // se uma coordenada fica no inicio ou fim de um array de coordenadas e tem uma cross bloqueia/preenche todas antes
 // se uma coordenada esta completa da cross nas caixas adjacentes
 // se uma coordenada esta completa nao utiliza ela ou as suas casas em outros algoritimos
+// se uma coordenada só tem uma caixa possivel porque uma caixa preenchida só pode ser de uma coordenada
 // adicionar checagens se uma caixa esta vazia antes de a modificar
+
 
 const testCoordinates = [ 3, 2 ];
 const testBox = [
@@ -213,4 +215,7 @@ const testBox2 = [
 // console.log(fillOverlappingBoxes(testBox2, testCoordinates2))
 
 console.log('result ', crossImpossibleLocations(testBox, testCoordinates))
+
+
+export default {}
 

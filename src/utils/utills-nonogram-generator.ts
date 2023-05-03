@@ -1,3 +1,9 @@
+// TODO CRIAR CLASSE MODELO PARA OS TYPES
+type GridCoordinates = {
+    lineCoordinates: number[][]
+    columnCoordinates: number[][]
+  }
+
 const createBooleanArray = (len: number):boolean[] => {
     const booleanArray: boolean[] = []
     for(let i = 0; i<len; i++){
@@ -24,35 +30,36 @@ const generateCoordinates = (boolArr: boolean[]):number[] => {
 }
 
 
-const generateParallelBooleanArray = (boolColumn): boolean[][] => {
+const generateParallelBooleanArray = (boolGrid: boolean[][]): boolean[][] => {
     //creates array with size equal to the number of items inside a boolArr
-    const parallelBoolArray: boolean[][] = Array.from(Array(boolColumn[0].length), () => []);
-    boolColumn.forEach((arr, index) => {
+    const parallelBoolGrid: boolean[][] = Array.from(Array(boolGrid[0].length), () => []);
+    boolGrid.forEach((arr, index) => {
         arr.forEach((bool, index) => {
-            parallelBoolArray[index].push(bool)
+            parallelBoolGrid[index].push(bool)
         })
     });
-    return parallelBoolArray
+    return parallelBoolGrid
 }
 
 
-const generateRandomCoordinatesGrid = (horLen: number, verLen: number): CoordinatesGrid => {
+const generateRandomGrid = (horLen: number, verLen: number): {boolGrid: boolean[][], gridCoordinates: GridCoordinates } => {
     let lineCoordinates:number[][] = [];
     let columnCoordinates:number[][]  = []
-    let boolColumn:boolean[][]  = [];
+    let boolGrid:boolean[][]  = [];
     for (let i = 0; i < horLen; i++) {
         const boolArr = createBooleanArray(verLen)
-        boolColumn.push(boolArr)
+        boolGrid.push(boolArr)
         lineCoordinates.push(generateCoordinates(boolArr))
     }
-    const parallelBoolArray = generateParallelBooleanArray(boolColumn)
+    const parallelBoolArray = generateParallelBooleanArray(boolGrid)
     for (let i = 0; i < verLen; i++) {
         columnCoordinates.push(generateCoordinates(parallelBoolArray[i]))
     }
-    return {lineCoordinates, columnCoordinates}
+    return {boolGrid, gridCoordinates: {lineCoordinates, columnCoordinates}}
 }
 
-export default {createBooleanArray, generateCoordinates, generateParallelBooleanArray, generateRandomCoordinatesGrid} 
+
+export default {createBooleanArray, generateCoordinates, generateParallelBooleanArray, generateRandomGrid} 
 
 
 

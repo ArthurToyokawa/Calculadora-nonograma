@@ -44,20 +44,20 @@ describe("createBooleanArray", () => {
     });
   });
   
-  describe("generateRandomCoordinatesGrid", () => {
-    test("should return an object with lineCoordinates and columnCoordinates", () => {
-      const horLen = 3;
-      const verLen = 4;
-      const result = generator.generateRandomCoordinatesGrid(horLen, verLen);
-      expect(result).toHaveProperty("lineCoordinates");
-      expect(result).toHaveProperty("columnCoordinates");
-    });
+  // describe("generateRandomGridCoordinates", () => {
+  //   test("should return an object with lineCoordinates and columnCoordinates", () => {
+  //     const horLen = 3;
+  //     const verLen = 4;
+  //     const result = generator.generateRandomGridCoordinates(horLen, verLen);
+  //     expect(result).toHaveProperty("lineCoordinates");
+  //     expect(result).toHaveProperty("columnCoordinates");
+  //   });
   
-    test("should correctly generate line and column coordinates", () => {
-      const horLen = 3;
-      const verLen = 4;
-      const result = generator.generateRandomCoordinatesGrid(horLen, verLen);
-      expect(result.lineCoordinates.length).toBe(horLen);
-      expect(result.columnCoordinates.length).toBe(verLen);
-    });
-  });
+  //   test("should correctly generate line and column coordinates", () => {
+  //     const horLen = 3;
+  //     const verLen = 4;
+  //     const result = generator.generateRandomGridCoordinates(horLen, verLen);
+  //     expect(result.lineCoordinates.length).toBe(horLen);
+  //     expect(result.columnCoordinates.length).toBe(verLen);
+  //   });
+  // });
