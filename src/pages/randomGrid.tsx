@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import './App.css';
-import gridGenerator from './utils/utills-nonogram-generator';
+import gridGenerator from '../utils/utills-nonogram-generator';
+import NonogramTable from '../components/nonogramTable';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const navigate = useNavigate();
   const [boolGrid, setBoolGrid] = useState<boolean[][]>([])
   const [columnCoordinates, setColumnCoordinates] = useState<number[][]>([])
   const [lineCoordinates, setLineCoordinates] = useState<number[][]>([])
@@ -16,9 +18,17 @@ function App() {
     setLineCoordinates(gridCoordinates.lineCoordinates)
     console.log('boolGrid', boolGrid)
     console.log('gridCoordinates', gridCoordinates)
+  },[numOfLines, numOfColumns])
+
+  useEffect(() => {
+    generateRandomGrid()
   },[])
+
   return (
     <div style={{padding: '10% 10% 0 10%'}} className="App">
+        <button onClick={() => navigate('/solver')}style={{ marginBottom: '1rem'}}>
+          Grid solver
+        </button>
       <div style={{display: 'flex', marginBottom: '1rem'}}>
         <label style={{marginRight: '0.25rem'}}>lines</label>
         <input 
@@ -37,55 +47,7 @@ function App() {
         Generate random grid
       </button>
       </div>
-      <div style={{display: 'flex'}}>
-        <div
-          style={{ 
-            padding: '1px',
-            width: '50px', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            justifyContent: 'flex-end' 
-          }} 
-        ></div>
-        {columnCoordinates.map((coordinates) => (
-          <div 
-            style={{ 
-              padding: '1px',
-              width: '50px', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'flex-end' 
-            }} 
-          >
-            {coordinates.map((num) => (
-              <div>{num.toString()}</div>
-            ))}
-          </div>
-      ))}
-      </div>
-      {boolGrid.map((boolArr, index) => (
-        <div style={{display: 'flex'}}>
-          <div 
-            style={{ 
-              padding: '1px',
-              width: '50px', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'flex-end',
-              justifyContent: 'center' 
-            }} 
-          >
-            <div>{lineCoordinates[index].toString()}</div>
-          </div>
-          {boolArr.map((bool) => (
-            <div 
-              style={{ border: '1px solid', width: '50px', height: '50px' }} 
-            >
-              {bool.toString()}
-            </div>
-          ))}
-        </div>
-      ))}
+      <NonogramTable boolGrid={boolGrid} columnCoordinates={columnCoordinates} lineCoordinates={lineCoordinates}/>
     </div>
   );
 }
