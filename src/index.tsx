@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RandomGrid from './pages/randomGrid';
-import GridSolver from './pages/gridSolver';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import RandomGrid from './pages/random-grid';
+import GridSolver from './pages/grid-solver';
 
 
 export default function App() {
