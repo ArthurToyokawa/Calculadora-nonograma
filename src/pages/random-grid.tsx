@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import gridGenerator from '../utils/utills-nonogram-generator';
-import NonogramTable from '../components/nonogram-table';
+import NonogramTableBool from '../components/nonogram-table-bool';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
     setBoolGrid(boolGrid);
     setColumnCoordinates(gridCoordinates.columnCoordinates);
     setLineCoordinates(gridCoordinates.lineCoordinates);
-    console.log('boolGrid', boolGrid);
+    console.log('boolGrid',boolGrid);
     console.log('gridCoordinates', gridCoordinates);
   },[numOfLines, numOfColumns]);
 
@@ -47,7 +47,7 @@ function App() {
         Generate random grid
         </button>
       </div>
-      <NonogramTable gridValues={boolGrid} columnCoordinates={columnCoordinates} lineCoordinates={lineCoordinates}/>
+      <NonogramTableBool gridValues={boolGrid} columnCoordinates={columnCoordinates} lineCoordinates={lineCoordinates}/>
     </div>
   );
 }

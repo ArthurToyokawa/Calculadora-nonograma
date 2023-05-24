@@ -1,5 +1,5 @@
 export enum BoxState {
-  empty,
-  filled,
-  crossed,
+  EMPTY,
+  FILLED,
+  CROSSED,
 }
