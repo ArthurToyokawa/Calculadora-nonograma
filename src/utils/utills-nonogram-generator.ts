@@ -30,7 +30,7 @@ const generateCoordinates = (boolArr: boolean[]):number[] => {
 const generateParallelBooleanArray = (boolGrid: boolean[][]): boolean[][] => {
   //creates array with size equal to the number of items inside a boolArr
   const parallelBoolGrid: boolean[][] = Array.from(Array(boolGrid[0].length), () => []);
-  boolGrid.forEach((arr, index) => {
+  boolGrid.forEach((arr) => {
     arr.forEach((bool, index) => {
       parallelBoolGrid[index].push(bool);
     });

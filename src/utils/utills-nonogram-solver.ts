@@ -3,20 +3,41 @@ import { CoordinateLocations } from '../models/coordinate-locations';
 import { GridCoordinates } from '../models/grid-coordinates';
 
 const solveGrid = (gridCoordinates: GridCoordinates): BoxState[][] => {
-  const box = createEmptyBox(gridCoordinates.lineCoordinates.length, gridCoordinates.columnCoordinates.length);
-  console.log(box);
+  let box = createEmptyBox(gridCoordinates.lineCoordinates.length, gridCoordinates.columnCoordinates.length);
   gridCoordinates.lineCoordinates.forEach((coordinates, index) => {
     // corre todos os algoritimos 
     fillEmptyRows(box[index], coordinates);
     fillFullRows(box[index], coordinates);
-    //TODO usar isso no final de outros algoritimos
-    // CrossCompleteLines(box[index], coordinates);
     fillOverlappingBoxes(box[index], coordinates);
     crossImpossibleLocations(box[index], coordinates);
+    //TODO usar isso no final de outros algoritimos
+    CrossCompleteLines(box[index], coordinates);
   });
+  console.log('FLIP BOX');  
+  box = generateParallelBooleanArray(box);
+  gridCoordinates.columnCoordinates.forEach((coordinates, index) => {
+    // corre todos os algoritimos 
+    fillEmptyRows(box[index], coordinates);
+    fillFullRows(box[index], coordinates);
+    fillOverlappingBoxes(box[index], coordinates);
+    crossImpossibleLocations(box[index], coordinates);
+    //TODO usar isso no final de outros algoritimos
+    CrossCompleteLines(box[index], coordinates);
+  });
+  box = generateParallelBooleanArray(box);
   // checa se teve alguma mudanca na box se teve corre denovo o algoritimo se nao corre outro algoritimo
   console.log(box);
   return box;
+};
+
+const generateParallelBooleanArray = (box: BoxState[][]) => {
+  const parallelGrid: BoxState[][] = Array.from(Array(box[0].length), () => []);
+  box.forEach((arr) => {
+    arr.forEach((box, index) => {
+      parallelGrid[index].push(box);
+    });
+  });
+  return parallelGrid;
 };
 
 const createEmptyBox = (lineLenght: number, columnLenght: number):BoxState[][] => {
@@ -42,6 +63,8 @@ const fillFullRows = (boxArray: BoxState[], coordinates: number[]):BoxState[] =>
 
 //if all coordinates are filled cross the rest of the boxes
 const CrossCompleteLines = (boxArray: BoxState[], coordinates: number[]):BoxState[] => {
+  // console.log('CrossCompleteLines');
+
   const coordinatesTotal = coordinates.reduce((total, curr) => {
     total += curr;
     return total;
@@ -64,16 +87,17 @@ const CrossCompleteLines = (boxArray: BoxState[], coordinates: number[]):BoxStat
 };
 
 const fillOverlappingBoxes = (boxArray: BoxState[], coordinates: number[]):BoxState[] => {
+  // console.log('fillOverlappingBoxes');
   const locations = getCoordinateLocations(boxArray, coordinates);
-  console.log(locations);
+  // console.log(locations);
   for(let i = 0; i< coordinates.length; i++){
     const possibleBoxesLen = locations[i].lastPossibleBox - locations[i].firstPossibleBox;
     if(coordinates[i] > possibleBoxesLen/2 ){
       //se for um numero impar o math.ceil e math.floor arrnajam para ele pegar os numeros do meio
       const coordinateDiff = Math.ceil(coordinates[i] - possibleBoxesLen/2);
-      console.log('coordinateDiff', coordinateDiff);
-      console.log('startFilling', Math.ceil(locations[i].firstPossibleBox + (possibleBoxesLen/2)-coordinateDiff));
-      console.log('stopFilling', Math.floor(locations[i].firstPossibleBox + (possibleBoxesLen/2)+coordinateDiff));
+      // console.log('coordinateDiff', coordinateDiff);
+      // console.log('startFilling', Math.ceil(locations[i].firstPossibleBox + (possibleBoxesLen/2)-coordinateDiff));
+      // console.log('stopFilling', Math.floor(locations[i].firstPossibleBox + (possibleBoxesLen/2)+coordinateDiff));
       boxArray.fill(
         BoxState.FILLED, 
         Math.ceil(locations[i].firstPossibleBox + (possibleBoxesLen/2)-coordinateDiff), 
@@ -85,19 +109,17 @@ const fillOverlappingBoxes = (boxArray: BoxState[], coordinates: number[]):BoxSt
 };
 
 const crossImpossibleLocations = (boxArray: BoxState[], coordinates: number[]):BoxState[] => {
+  console.log('crossImpossibleLocations');
   const locations = getCoordinateLocations(boxArray, coordinates);
   console.log(locations);
   const possibleIndexes: number[] = [];
-  console.log('test');
   locations.forEach(location => {
     for (let i = location.firstPossibleBox; i <= location.lastPossibleBox; i++) {
       possibleIndexes.push(i);
     }
   });
-  console.log('test1');
-  console.log('boxlen ', boxArray.length);
+  // console.log('boxlen ', boxArray.length);
   for (let i = 0; i < boxArray.length; i++) {
-    console.log('test: ', i);
     if (!possibleIndexes.includes(i)) {
       boxArray[i] = BoxState.CROSSED;
     }
@@ -125,7 +147,7 @@ const getCoordinateLocations = (boxArray: BoxState[], coordinates: number[]):Coo
 };
   
 const getCoordinatePossibleBoxes = (boxArray: BoxState[], coordinates: number[]): number[] => {
-  // possivel fazer as coordenadas pelo array pela esquerda e para direita, para ver as possiveis blocos
+  // faz as coordenadas pelo array pela esquerda e pela direita, para ver as possiveis blocos
   const possibleBoxes: number[] = [];
   let startingBox = 0;
   coordinates.forEach((coordinate) => {
