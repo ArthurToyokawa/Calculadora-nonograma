@@ -22,6 +22,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   'rules': {
+    '@typescript-eslint/no-empty-function': 'off',
     'react/react-in-jsx-scope': 'off',
     'quotes': ['error', 'single'],
     // we want to force semicolons

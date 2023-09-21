@@ -12,18 +12,18 @@ function App() {
     [1, 2, 1, 1, 1]
   ]);
   const [columnCoordinates, setColumnCoordinates] = useState<number[][]>([
-    [1, 1],
-    [1, 2],
     [1, 3],
+    [5],
     [3],
-    [5]
+    [5],
+    [1, 1]
   ]);
   const [lineCoordinates, setLineCoordinates] = useState<number[][]>([
     [2, 1],
-    [1, 2],
     [4],
     [4],
-    [1, 1, 1]
+    [5],
+    [2, 1]
   ]);
 
   const handleClickSolve = () => {
