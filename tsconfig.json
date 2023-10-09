@@ -24,6 +24,7 @@
     "src",
     "src/pages",
     "src/models",
+    "src/utils",
     "src/components"
   ]
 }
