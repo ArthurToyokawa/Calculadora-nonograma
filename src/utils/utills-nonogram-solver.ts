@@ -16,8 +16,6 @@ const solveGrid = (gridCoordinates: GridCoordinates): BoxState[][] => {
     }
     box = newBox;
     console.log('NEWBOX', JSON.stringify(newBox.slice()));
-    //TEST
-    solving = false;
   }
 
   return box;
@@ -116,18 +114,13 @@ const CrossCompleteCoordinates = (boxArray: BoxState[], coordinates: number[]): 
 };
 
 const fillOverlappingBoxes = (boxArray: BoxState[], coordinates: number[]): BoxState[] => {
-  // console.log('fillOverlappingBoxes');
   const locations = getCoordinateLocations(boxArray, coordinates);
 
-  // console.log(locations);
   for (let i = 0; i < coordinates.length; i++) {
-    const possibleBoxesLen = locations[i].lastPossibleBox - locations[i].firstPossibleBox;
+    const possibleBoxesLen = locations[i].lastPossibleBox + 1 - locations[i].firstPossibleBox;
     if (coordinates[i] > possibleBoxesLen / 2) {
-      //se for um numero impar o math.ceil e math.floor arrnajam para ele pegar os numeros do meio
+      //se for um numero impar o math.ceil e math.floor arranjam para ele pegar os numeros do meio
       const coordinateDiff = Math.ceil(coordinates[i] - possibleBoxesLen / 2);
-      // console.log('coordinateDiff', coordinateDiff);
-      // console.log('startFilling', Math.ceil(locations[i].firstPossibleBox + (possibleBoxesLen/2)-coordinateDiff));
-      // console.log('stopFilling', Math.floor(locations[i].firstPossibleBox + (possibleBoxesLen/2)+coordinateDiff));
       boxArray.fill(
         BoxState.FILLED,
         Math.ceil(locations[i].firstPossibleBox + possibleBoxesLen / 2 - coordinateDiff),
@@ -162,13 +155,8 @@ const getCoordinateLocations = (
   const coordinateLocations: CoordinateLocations[] = [];
   // faz as coordenadas pelo array pela esquerda e pela direita, para ver as possiveis blocos
   let startingBox = 0;
-  if (JSON.stringify(coordinates) === '[1,2]') {
-    console.log('ALGORITIMO ESTRANHO');
-    console.log(boxArray);
-  }
   coordinates.forEach((coordinate, i) => {
     let verificaCoordenada = true;
-    // TODO SE É UMA COORDENADA NO INICIO/FIM OU DEPOIS DE UMA COORDENADA COMPLETA E TEM UMA CASA PREENCHIDA
     // TODO NOMEAR ESSA VAR MELHOR
     const treatFilledBox = i === 0 || coordinateLocations[i - 1].isComplete;
     while (verificaCoordenada) {
@@ -184,23 +172,21 @@ const getCoordinateLocations = (
       ) {
         startingBox++;
       } else {
-        // TODO SE É UMA COORDENADA NO INICIO/FIM OU DEPOIS DE UMA COORDENADA COMPLETA E TEM UMA CASA PREENCHIDA
-        // O lastPossibleBox = casaPreenchidaIndex + coordenada
         const isComplete = boxArray.slice(startingBox, startingBox + coordinate).every((state) => {
           return state === BoxState.FILLED;
         });
         let lastPossibleBox = 0;
         if (isComplete) {
-          lastPossibleBox = startingBox + coordinate;
+          lastPossibleBox = startingBox + coordinate - 1;
         } else if (treatFilledBox) {
           const coordinateFilledIndex = boxArray
             .slice(startingBox, startingBox + coordinate)
             .indexOf(BoxState.FILLED);
           const filledInCoordinate = coordinateFilledIndex !== -1;
           if (filledInCoordinate) {
-            const sum = coordinateFilledIndex + coordinate + 1;
-            if (sum > boxArray.length) {
-              lastPossibleBox = boxArray.length;
+            const sum = startingBox + coordinateFilledIndex + coordinate;
+            if (sum > boxArray.length - 1) {
+              lastPossibleBox = boxArray.length - 1;
             } else {
               lastPossibleBox = sum;
             }
@@ -219,11 +205,6 @@ const getCoordinateLocations = (
   });
 
   // fazendo a logica de coordenadas com as coordenadas e rows reversas
-
-  if (JSON.stringify(coordinates) === '[1,2]') {
-    console.log(JSON.stringify(coordinateLocations));
-  }
-
   startingBox = 0;
 
   const reverseBox = boxArray.slice().reverse();
@@ -236,15 +217,7 @@ const getCoordinateLocations = (
       // TODO NOMEAR ESSA VAR MELHOR
       const treatFilledBox = i === 0 || coordinateLocations[i - 1].isComplete;
       if (treatFilledBox && coordinateLocations[i].lastPossibleBox !== 0) {
-        startingBox = reverseBox.length - coordinateLocations[i].lastPossibleBox;
-        // console.log(
-        //   'coordinate ',
-        //   coordinate,
-        //   ', lastPossibleBox ',
-        //   coordinateLocations[i].lastPossibleBox,
-        //   ', startingBox ',
-        //   startingBox
-        // );
+        startingBox = reverseBox.length - 1 - coordinateLocations[i].lastPossibleBox;
       }
 
       while (verificaCoordenada) {
@@ -265,11 +238,12 @@ const getCoordinateLocations = (
             .every((state) => {
               state === BoxState.FILLED;
             });
+
           // TODO SE É UMA COORDENADA NO INICIO/FIM OU DEPOIS DE UMA COORDENADA COMPLETA E TEM UMA CASA PREENCHIDA TRATAR IGUAL EM CIMA
           //TODO TRAAR O ISCOMPLETE PRA SETAR O LASPOSSIBLEbOX E O FIRSTPOSSIBLEBOX
-          let firstPossibleBox = reverseBox.length;
+          let firstPossibleBox = reverseBox.length - 1;
           if (isComplete) {
-            firstPossibleBox = reverseBox.length - startingBox - coordinate;
+            firstPossibleBox = reverseBox.length - 1 - startingBox - coordinate;
           }
           // else if (treatFilledBox) {
           //   const coordinateFilledIndex = reverseBox
@@ -283,7 +257,7 @@ const getCoordinateLocations = (
 
           // TODO SÓ SETAR O FIRSTPOSSIBLE BOX SE ISCOMPLETE OU TREAT
           // coordinateLocations[i].firstPossibleBox = firstPossibleBox;
-          coordinateLocations[i].lastPossibleBox = reverseBox.length - startingBox;
+          coordinateLocations[i].lastPossibleBox = reverseBox.length - 1 - startingBox;
           coordinateLocations[i].isComplete = isComplete;
           startingBox += coordinate + 1;
           verificaCoordenada = false;
@@ -293,9 +267,6 @@ const getCoordinateLocations = (
   });
 
   const returnlocations = coordinateLocations.reverse();
-  if (JSON.stringify(coordinates) === '[1,2]') {
-    console.log('RETURN ', JSON.stringify(returnlocations));
-  }
 
   return returnlocations;
 };
@@ -304,7 +275,8 @@ export default {
   solveGrid,
   fillEmptyRows,
   fillFullRows,
-  CrossCompleteLines: CrossCompleteCoordinates,
+  runSolvingAlgorithims,
+  CrossCompleteCoordinates,
   getCoordinateLocations,
   fillOverlappingBoxes,
   crossImpossibleLocations

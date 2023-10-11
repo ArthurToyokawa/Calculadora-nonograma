@@ -14,31 +14,42 @@ function App() {
     [0, 0, 0, 0, 0]
   ]);
   const [testBoolGrid, setTestBoolGrid] = useState<boolean[][]>([
-    [true, false, true, false, false],
+    [true, false, true, true, false],
     [true, true, true, true, true],
-    [false, true, true, true, false],
     [false, true, true, true, true],
-    [true, false, true, true, true]
+    [true, true, true, false, false],
+    [false, true, false, true, true]
   ]);
   const [columnCoordinates, setColumnCoordinates] = useState<number[][]>([
     [2, 1],
-    [3],
-    [5],
     [4],
-    [1, 2]
+    [4],
+    [3, 1],
+    [2, 1]
   ]);
   const [lineCoordinates, setLineCoordinates] = useState<number[][]>([
-    [1, 1],
+    [1, 2],
     [5],
-    [3],
     [4],
-    [1, 3]
+    [3],
+    [1, 2]
   ]);
 
   const handleClickSolve = () => {
     console.log('solveGrid');
-    // setBoxGrid(Solver.solveGrid({ columnCoordinates, lineCoordinates }));
-    console.log(Solver.getCoordinateLocations([0, 1, 0, 0, 1], [1, 2]));
+    setBoxGrid(Solver.solveGrid({ columnCoordinates, lineCoordinates }));
+
+    // TESTS
+    // setBoxGrid(Solver.runSolvingAlgorithims(boxGrid, { columnCoordinates, lineCoordinates }));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 0, 0, 0], [1, 2])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 0, 0, 0], [5])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 0, 0, 0], [4])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 0, 0, 0], [3])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 1, 0, 0], [3])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 0, 0, 0], [3, 1])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 1, 0, 0, 1], [1, 2])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 0, 2, 0, 0], [2, 2])));
+    // console.log(JSON.stringify(Solver.getCoordinateLocations([0, 1, 0, 0, 1], [1, 1])));
   };
 
   const getRandomGrid = () => {
